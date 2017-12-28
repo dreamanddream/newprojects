@@ -15,7 +15,10 @@
       </div>
     </div>
     <div class="app-content">
-      <router-view></router-view>
+        <!--如果要有缓存使用keepalive-->
+        <keep-alive>
+          <router-view></router-view>
+        </keep-alive>
     </div>
     <div class="app-foot">
       <p>© 2017</p>
