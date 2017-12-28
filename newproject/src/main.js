@@ -4,9 +4,10 @@ import Vue from 'vue'
 // import App from './App' // 引入app.vue作为根组件
 // 搭建项目引入自己的layout模板
 import Layout from './components/layout'
-
+// 设置页面要跳转到的路由地方
+import IndexPage from './pages/index'
 // 引入自己安装的路由 vue-router库
-// import VRouter from 'vue-router'
+import VueRouter from 'vue-router'
 // 引入vuex
 // import Vuex from 'vuex'
 // 引入自己创建的apple组件
@@ -15,12 +16,23 @@ import Layout from './components/layout'
 // import RedApple from './components/RedApple'
 
 // 使用vue.use注册使用路由vrouter
-// Vue.use(VRouter)
+Vue.use(VueRouter)
+let router = new VueRouter({
+  mode: 'history',
+  routes: [
+    {
+      path: '/',
+      // 注意这里是component
+      component: IndexPage
+    }
+  ]
+})
+
 // 使用use方法注册vuex
 // Vue.use(Vuex)
 // 引入后要实例化路由,实例化后插入到下面vue实例中
 // let router = new VRouter({
-//   // 支持前后切换
+//   // 支持前后切换.使用html5的history
 //   mode: 'history',
 //   // 设置映射关系
 //   routes: [
@@ -87,7 +99,7 @@ new Vue({
   // 模板是app这样的根组件
   el: '#app',
   // 插入路由
-  // router,
+  router,
   // 将store添加到实例化的vue中,全局使用，然后可以在每一个子组件中，通过this.$store.stare去触发方法，调用状态
   // store,
   // template: '<App/>',
