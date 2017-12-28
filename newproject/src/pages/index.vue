@@ -20,12 +20,26 @@
       </div>
       <div class="index-left-block lastest-news">
         <h2>最新消息</h2>
-        <ul></ul>
+        <ul>
+          <li v-for="item in newList">
+            <a :href="item.url">{{item.title}}</a>
+          </li>
+        </ul>
       </div>
     </div>
     <div class="index-right">
-      <slide-show :slides="slides" :inv="invTime"></slide-show>
       <div class="index-board-list">
+      <!--在css中设置最右边margin-right为0，同时通过index,index从0开始.
+      绑定一个类，这个绑定的类和原始类可以并存，互不影响。判定div的div的余数，从而給偶数添加某个类,同时这里数组和对象可以混用，出现两个类可以用数组-->
+        <div class="index-board-item" v-for="(item,index) in boardList" :class="[{'line-last' : index % 2 !==0},'index-board-' + item.id]">
+         <div class="index-board-item-inner">
+          <h2>{{item.title}}</h2>
+          <p>{{item.description}}</p>
+          <div class="index-board-button">
+            <a href="" class="button">立即购买</a>
+          </div>
+         </div>
+        </div>
       </div>
     </div>
   </div>
@@ -36,7 +50,36 @@
 export default {
   data () {
     return {
-      // 渲染news页面
+      // 要看不同数据的不同写法！！！！！！！！
+      // 显示首页中的品牌栏目
+      boardList: [
+        {
+          title: '开放产品',
+          description: '开放产品是一个新产品',
+          saleout: false,
+          // 显示对应的图片可以通过id也可以通过index，可以看下对应图片的css写法
+          id:'car'
+        },
+        {
+          title: '品牌营销',
+          description: '品牌营销帮助你的产品',
+          saleout: false,
+          id: 'earth'
+        },
+        {
+          title: '使命必达',
+          description: '品牌营销帮助你的产品',
+          saleout: true,
+          id: 'loud'
+        },
+        {
+          title: '马到成功',
+          description: '品牌营销帮助你的产品',
+          saleout: true,
+          id: 'hill'
+        }
+      ],
+      // 渲染news页面,这是一个数组
       newList:[
         {
           title:'新闻1',
@@ -54,7 +97,7 @@ export default {
           title:'新闻4',
           url:'http://starcraft.com'
         }
-      ]
+      ],
       // 通过vue渲染产品页面
       productList: {
         pc: {
