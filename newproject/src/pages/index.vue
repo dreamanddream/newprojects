@@ -20,7 +20,7 @@
       </div>
       <div class="index-left-block lastest-news">
         <h2>最新消息</h2>
-        <h3>应用分类</h3>
+        <ul></ul>
       </div>
     </div>
     <div class="index-right">
@@ -37,7 +37,24 @@ export default {
   data () {
     return {
       // 渲染news页面
-
+      newList:[
+        {
+          title:'新闻1',
+          url:'http://starcraft.com'
+        },
+        {
+          title:'新闻2',
+          url:'http://starcraft.com'
+        },
+        {
+          title:'新闻3',
+          url:'http://starcraft.com'
+        },
+        {
+          title:'新闻4',
+          url:'http://starcraft.com'
+        }
+      ]
       // 通过vue渲染产品页面
       productList: {
         pc: {
