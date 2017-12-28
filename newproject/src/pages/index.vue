@@ -64,7 +64,8 @@ export default {
         },
         app: {
           title: '手机应用类',
-          last: true,// 标记一下，判断是否是最后一个
+          // 标记一下，判断是否是最后一个
+          last: true,
           list: [
             {
               name: '91助手',
