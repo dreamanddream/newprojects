@@ -1,13 +1,15 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
+// 引入自己安装的路由 vue-router库
+import VueRouter from 'vue-router'
+// 引入vue-resource
+import VueResource from 'vue-resource'
 // import App from './App' // 引入app.vue作为根组件
 // 搭建项目引入自己的layout模板
 import Layout from './components/layout'
 // 设置页面要跳转到的路由地方
 import IndexPage from './pages/index'
-// 引入自己安装的路由 vue-router库
-import VueRouter from 'vue-router'
 // 引入vuex
 // import Vuex from 'vuex'
 // 引入自己创建的apple组件
@@ -17,6 +19,9 @@ import VueRouter from 'vue-router'
 
 // 使用vue.use注册使用路由vrouter
 Vue.use(VueRouter)
+// 注册vueResource，相当于声明，声明后就可以在各个子文件通过this.$http进行请求
+Vue.use(VueResource)
+// 实例化
 let router = new VueRouter({
   mode: 'history',
   routes: [
@@ -27,7 +32,6 @@ let router = new VueRouter({
     }
   ]
 })
-
 // 使用use方法注册vuex
 // Vue.use(Vuex)
 // 引入后要实例化路由,实例化后插入到下面vue实例中
