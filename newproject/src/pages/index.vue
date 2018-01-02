@@ -22,7 +22,7 @@
         <h2>最新消息</h2>
         <ul>
           <li v-for="item in newList">
-            <a :href="item.url">{{item.title}}</a>
+            <a :href="item.url" class="new-item">{{item.title}}</a>
           </li>
         </ul>
       </div>
@@ -53,13 +53,25 @@ export default {
     // 请求是一个prime对象,有一个then方法
     // 这里也可以使用post请求,传递参数
     /* this.$http.post('getList', {userId: 123}) */
+    // 同时要注意如果getNewsList文件设置需要有id，要不会有错误，自己可以看下，什么原因？？？？？？？
+    // 通过ajax进行后台信息请求，同时利用了jsonserver，请求api路径下的json数据
     this.$http.get('api/getNewsList')
     // then方法接受两个函数，一个是成功回调，一个是失败回调
-    .then(function (data) {
-      console.log(data)
-    }, function (err) {
+    // 使用箭头函数
+    .then((res) => {
+      this.newList = res.data
+      console.log(res.data)
+    }, (err) => {
       console.log(err)
     })
+    // 以下是原始写法，上面是箭头函数
+    // .then(function (res) {
+    //   // 将请求成功的数据，赋给newList,this是在闭包内,代码环境下的this，而不是执行环境下的this
+    //   this.newsList = res.data
+    //   console.log(data)
+    // }, function (err) {
+    //   console.log(err)
+    // })
   },
   data () {
     return {
@@ -94,22 +106,23 @@ export default {
       ],
       // 渲染news页面,这是一个数组
       newList: [
-        {
-          title: '新闻1',
-          url: 'http://starcraft.com'
-        },
-        {
-          title: '新闻2',
-          url: 'http://starcraft.com'
-        },
-        {
-          title: '新闻3',
-          url: 'http://starcraft.com'
-        },
-        {
-          title: '新闻4',
-          url: 'http://starcraft.com'
-        }
+        // 将请求的成功的数据填充到这
+        // {
+        //   title: '新闻1',
+        //   url: 'http://starcraft.com'
+        // },
+        // {
+        //   title: '新闻2',
+        //   url: 'http://starcraft.com'
+        // },
+        // {
+        //   title: '新闻3',
+        //   url: 'http://starcraft.com'
+        // },
+        // {
+        //   title: '新闻4',
+        //   url: 'http://starcraft.com'
+        // }
       ],
       // 通过vue渲染产品页面
       productList: {
