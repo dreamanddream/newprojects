@@ -28,6 +28,9 @@
       </div>
     </div>
     <div class="index-right">
+      <!--考虑到不同页面都要调用这个内容，所以是根据传递进行调用-->
+      <!--将数据传递到子组件-->
+      <slide-show :slides="slides"></slide-show>
       <div class="index-board-list">
       <!--在css中设置最右边margin-right为0，同时通过index,index从0开始.
       绑定一个类，这个绑定的类和原始类可以并存，互不影响。判定div的div的余数，从而給偶数添加某个类,同时这里数组和对象可以混用，出现两个类可以用数组-->
@@ -46,8 +49,13 @@
 </template>
 
 <script>
-// import slideShow from '../components/slideShow'
+// 使用es6的方式引入slideShow组件
+import slideShow from '../components/slideShow'
 export default {
+  // 注册组件，然后在template中使用
+  components: {
+    slideShow
+  },
   // 使用vue注册的组件进行数据请求
   created: function () {
     // 请求是一个prime对象,有一个then方法
@@ -55,7 +63,7 @@ export default {
     /* this.$http.post('getList', {userId: 123}) */
     // 同时要注意如果getNewsList文件设置需要有id，要不会有错误，自己可以看下，什么原因？？？？？？？
     // 通过ajax进行后台信息请求，同时利用了jsonserver，请求api路径下的json数据
-    this.$http.get('api/getNewsList')
+    this.$http.post('api/getNewsList')
     // then方法接受两个函数，一个是成功回调，一个是失败回调
     // 使用箭头函数
     .then((res) => {
@@ -75,6 +83,34 @@ export default {
   },
   data () {
     return {
+      // 轮播图片数据设置
+      invTime: 2000,
+      slides: [
+        {
+          // 使用require引入，通过webpack将图片解析到相应位置。打包后，变成了解析后的地址。引入图片使用require？
+          // 如果不使用require，webpack不会当成模块处理，会找不到路径
+          // 当模板使用时要加入require，src都要加入require
+          src: require('../assets/slideShow/pic1.jpg'),
+          title: 'xxx1',
+          href: 'detail/analysis'
+        },
+        {
+          src: require('../assets/slideShow/pic2.jpg'),
+          title: 'xxx2',
+          href: 'detail/count'
+        },
+        {
+          src: require('../assets/slideShow/pic3.jpg'),
+          title: 'xxx3',
+          href: 'http://xxx.xxx.com'
+        },
+        {
+          src: require('../assets/slideShow/pic4.jpg'),
+          title: 'xxx4',
+          href: 'detail/forecast'
+        }
+      ],
+
       // 要看不同数据的不同写法！！！！！！！！
       // 显示首页中的品牌栏目
       boardList: [
