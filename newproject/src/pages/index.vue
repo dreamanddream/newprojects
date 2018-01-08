@@ -30,7 +30,7 @@
     <div class="index-right">
       <!--考虑到不同页面都要调用这个内容，所以是根据传递进行调用-->
       <!--将数据传递到子组件-->
-      <slide-show :slides="slides"></slide-show>
+      <slide-show :slides="slides" :inv="invTime"></slide-show>
       <div class="index-board-list">
       <!--在css中设置最右边margin-right为0，同时通过index,index从0开始.
       绑定一个类，这个绑定的类和原始类可以并存，互不影响。判定div的div的余数，从而給偶数添加某个类,同时这里数组和对象可以混用，出现两个类可以用数组-->

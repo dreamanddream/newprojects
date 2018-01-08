@@ -23,6 +23,7 @@ Vue.use(VueRouter)
 Vue.use(VueResource)
 // 实例化
 let router = new VueRouter({
+  // 返回上一步使用mode
   mode: 'history',
   routes: [
     {

@@ -9,7 +9,7 @@
             <li class="nav-pile">|</li>
             <li>注册</li>
             <li class="nav-pile">|</li>
-            <li>关于</li>
+            <li @click="aboutClick">关于</li>
           </ul>
         </div>
       </div>
@@ -17,23 +17,37 @@
     <div class="app-content">
         <!--如果要有缓存使用keepalive-->
         <keep-alive>
+          <!--在main.js中设置路由，一旦访问根路径就访问的是pages里面的index页面-->
           <router-view></router-view>
         </keep-alive>
     </div>
     <div class="app-foot">
       <p>© 2017</p>
     </div>
+    <!--引入dialog组件,同时将isShow传递给子组件-->
+    <mydialog :isShow="isShowDialog"></mydialog>
   </div>
 </template>
 
 <script>
-  export default {
-    data () {
-      return {
-        msg: 'I am a apple'
-      }
+import dialog from './dialog'
+export default {
+  components: {
+    mydialog: dialog
+  },
+  data () {
+    return {
+      // 设置dialog默认关闭
+      isShowDialog: false
+    }
+  },
+  methods: {
+    // 点击关于设置dialog为true
+    aboutClick () {
+      this.isShowDialog = true
     }
   }
+}
 </script>
 
 <style>
