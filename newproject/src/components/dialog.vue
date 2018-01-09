@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div class="dialog-wrap" v-if="isShow" @click="closeMyself">
+    <div class="dialog-wrap" v-if="isShow">
       <div class="dialog-cover"></div>
-      <div class="dialog-content">
+      <div class="dialog-content" v-if="isShow">
         <p class="dialog-close" @click="closeMyself">x</p>
         <!--slot插槽-->
         <slot>sssss</slot>
@@ -21,6 +21,7 @@ export default {
   },
   methods: {
     closeMyself () {
+      // 触发父组件传递的on-close方法
       this.$emit('on-close')
     }
   }

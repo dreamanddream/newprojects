@@ -5,9 +5,9 @@
         <img src="../assets/logo.png" alt="">
         <div class="head-nav">
           <ul class="nav-list">
-            <li>登录</li>
+            <li @click="logClick">登录</li>
             <li class="nav-pile">|</li>
-            <li>注册</li>
+            <li @click="regClick">注册</li>
             <li class="nav-pile">|</li>
             <li @click="aboutClick">关于</li>
           </ul>
@@ -24,27 +24,56 @@
     <div class="app-foot">
       <p>© 2017</p>
     </div>
-    <!--引入dialog组件,同时将isShow传递给子组件-->
-    <mydialog :isShow="isShowDialog"></mydialog>
+    <!--弹框内容：引入dialog组件,同时将isShow传递给子组件-->
+    <!--以字符串的形式将变量名传递进来,在调用关闭时可以传递参数attr-->
+    <mydialog :isShow="isShowAboutDialog" @on-close="closeDialog('isShowAboutDialog')">
+      <p>此处省略关于部分</p>
+    </mydialog>
+    <mydialog :isShow="isShowRegDialog" @on-close="closeDialog('isShowRegDialog')">
+     <reg-form></reg-form>
+    </mydialog>
+    <mydialog :isShow="isShowLogDialog" @on-close="closeDialog('isShowLogDialog')">
+      <log-form></log-form>
+    </mydialog>
   </div>
 </template>
 
 <script>
 import dialog from './dialog'
+import LogForm from './logForm'
+import RegForm from './regForm'
 export default {
   components: {
-    mydialog: dialog
+    mydialog: dialog,
+    // 驼峰式在模板中使用可以转换为中划线的，引入组件，注册组件，使用组件
+    LogForm,
+    RegForm
   },
   data () {
     return {
       // 设置dialog默认关闭
-      isShowDialog: false
+      // isShowDialog: false,
+      // 由于有不同的dialog，所以针对不同的进行设置
+      isShowAboutDialog: false,
+      isShowLogDialog: false,
+      isShowRegDialog: false
+
     }
   },
   methods: {
     // 点击关于设置dialog为true
     aboutClick () {
-      this.isShowDialog = true
+      this.isShowAboutDialog = true
+    },
+    logClick () {
+      this.isShowLogDialog = true
+    },
+    regClick () {
+      this.isShowRegDialog = true
+    },
+    // 点击关闭设置为false，弹框消失，传递参数
+    closeDialog (attr) {
+      this[attr] = false
     }
   }
 }
