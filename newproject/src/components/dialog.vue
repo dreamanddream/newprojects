@@ -1,14 +1,17 @@
 <template>
   <div>
+    <!--transition要放在v-if中使用-->
     <div class="dialog-wrap" v-if="isShow">
       <div class="dialog-cover"></div>
-      <div class="dialog-content" v-if="isShow">
-        <p class="dialog-close" @click="closeMyself">x</p>
-        <!--slot插槽-->
-        <slot>sssss</slot>
+        <transition name="drop">
+          <div class="dialog-content" v-if="isShow">
+            <p class="dialog-close" @click="closeMyself">x</p>
+            <!--slot插槽-->
+             <slot>sssss</slot>
+          </div>
+        </transition>
       </div>
     </div>
-  </div>
 </template>
 <script>
 export default {

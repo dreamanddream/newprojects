@@ -10,6 +10,13 @@ import VueResource from 'vue-resource'
 import Layout from './components/layout'
 // 设置页面要跳转到的路由地方
 import IndexPage from './pages/index'
+// 添加新路由
+import DetailPage from './pages/detail'
+// 添加子路由
+import DetailForPage from './pages/detail/forecase'
+// import DetailAnaPage from './pages/detail/analysis'
+// import DetailCouPage from './pages/detail/count'
+// import DetailPubPage from './pages/detail/publish'
 // 引入vuex
 // import Vuex from 'vuex'
 // 引入自己创建的apple组件
@@ -23,13 +30,40 @@ Vue.use(VueRouter)
 Vue.use(VueResource)
 // 实例化
 let router = new VueRouter({
+  ActiveClass: 'active',
   // 返回上一步使用mode
   mode: 'history',
+  // 配置路由
   routes: [
     {
       path: '/',
       // 注意这里是component
+      // 配置根页面路由，一旦访问根页面，就跳转到/pages/index页面
       component: IndexPage
+    },
+    // 添加路由配置
+    {
+      path: '/detail',
+      component: DetailPage,
+      // 设置子路由，在detail.vue中使用
+      children: [
+        {
+          path: 'forecast', // 注意这里的路径不能加/，这里路由就表示/detail/forecast
+          component: DetailForPage
+        }
+      // {
+// path: 'analysis',
+// component: DetailAnaPage
+// }
+// {
+// path: 'count',
+// component: DetailCouPage
+        // },
+        // {
+// path: 'publish',
+// component: DetailPubPage
+// }
+      ]
     }
   ]
 })
@@ -109,8 +143,8 @@ new Vue({
   // store,
   // template: '<App/>',
   // 修改模板
-  template: '<Layout/>',
+  template: '<Layout/>', // 这个模板也必须要通过下面注册组件，才能有效，同样名称也只能是和引入的一样Layout from './components/layout
   // components: { App }
   // 重新设置新的组件
-  components: { Layout } // 引入的根组件名称
+  components: { Layout } // 引入的根组件名称,相当于设置网站的公共头部和底部，通过import Layout from './components/layout'引入，这里模板名称要和命名的模板名称一致
 })

@@ -5,9 +5,12 @@
         <img src="../assets/logo.png" alt="">
         <div class="head-nav">
           <ul class="nav-list">
-            <li @click="logClick">登录</li>
-            <li class="nav-pile">|</li>
-            <li @click="regClick">注册</li>
+            <li>{{ username }}</li>
+            <!--当有了用户信息后，登录和注册都不再显示，所以要加一个判断-->
+            <li v-if="username== ''" @click="logClick">登录</li>
+            <li v-if="username!== ''">退出</li>
+            <li v-if="username== ''" class="nav-pile">|</li>
+            <li v-if="username== ''" @click="regClick">注册</li>
             <li class="nav-pile">|</li>
             <li @click="aboutClick">关于</li>
           </ul>
@@ -33,7 +36,8 @@
      <reg-form></reg-form>
     </mydialog>
     <mydialog :isShow="isShowLogDialog" @on-close="closeDialog('isShowLogDialog')">
-      <log-form></log-form>
+      <!--通过has-log获取存储在db中的username信息，并展示在页面中-->
+      <log-form @has-log="onSuccessLog"></log-form>
     </mydialog>
   </div>
 </template>
@@ -56,8 +60,8 @@ export default {
       // 由于有不同的dialog，所以针对不同的进行设置
       isShowAboutDialog: false,
       isShowLogDialog: false,
-      isShowRegDialog: false
-
+      isShowRegDialog: false,
+      username: ''
     }
   },
   methods: {
@@ -74,6 +78,13 @@ export default {
     // 点击关闭设置为false，弹框消失，传递参数
     closeDialog (attr) {
       this[attr] = false
+    },
+    onSuccessLog (data) {
+      console.log('请求后的用户信息' + data.username)
+      // 关闭组件弹框
+      this.closeDialog('isShowLogDialog')
+      // 异步获取登录的data
+      this.username = data.username
     }
   }
 }
