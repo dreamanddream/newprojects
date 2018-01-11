@@ -4,14 +4,16 @@
       <div class="product-board">
         <!-- <img :src="productIcon"> -->
         <!--最原始通过img中src写图片路径-->
-        <img src="../assets/images/1.png" alt="">
+        <!-- <img src="../assets/images/1.png" alt=""> -->
+        <!--由于图不在循环里，所以做了图的映射,相当于要知道当前文件所在的路径，通过$route.path获取路径-->
+        <img :src="productIcon" alt="">
         <ul>
           <!--没有使用路由时，直接使用在li中使用v-for渲染数据-->
           <!-- <li v-for="item in products">{{ item.name }}</li> -->
           <!--设置路由后，结合router-link来渲染数据,用to来绑定需要跳转的地址，结合data数据中path：选项使用
           默认router-link生成a标签，这里使用tag属性指定生成li标签，active-class的使用可以再官网上查到信息,这里表示鼠标滑到当前位置当前位置添加active，
           如果自己不写active-class，那么默认会有一个router-link-active,但是我试了，为什么没有？？？？？？不会添加一个类-->
-          <router-link v-for="item in products" :to="{ path: item.path }" tag="li" active-class="active">
+          <router-link v-for="item in products" :key="item.id" :to="{ path: item.path }" tag="li" active-class="active">
             {{ item.name }}
           </router-link>
         </ul>
@@ -37,6 +39,7 @@ export default {
           name: '数据统计22222',
           // 设置跳转路径，同样不能加/
           path: 'count',
+          // 通过require引入图片
           icon: require('../assets/images/1.png'),
           active: false
         },
@@ -57,15 +60,16 @@ export default {
         }
       ],
       imgMap: {
-        '/detail/count': require("../assets/images/1.png"),
-        '/detail/forecast': require("../assets/images/2.png"),
-        '/detail/analysis': require("../assets/images/3.png"),
-        '/detail/publish': require("../assets/images/4.png")
+        '/detail/count': require('../assets/images/1.png'),
+        '/detail/forecast': require('../assets/images/2.png'),
+        '/detail/analysis': require('../assets/images/3.png'),
+        '/detail/publish': require('../assets/images/4.png')
       }
     }
   },
   computed: {
     productIcon () {
+      // 通过计算属性得到网址中的路径，注意是$route而不是$router
       return this.imgMap[this.$route.path]
     }
   }

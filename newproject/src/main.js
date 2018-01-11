@@ -14,9 +14,9 @@ import IndexPage from './pages/index'
 import DetailPage from './pages/detail'
 // 添加子路由
 import DetailForPage from './pages/detail/forecase'
-// import DetailAnaPage from './pages/detail/analysis'
-// import DetailCouPage from './pages/detail/count'
-// import DetailPubPage from './pages/detail/publish'
+import DetailAnaPage from './pages/detail/analysis'
+import DetailCouPage from './pages/detail/count'
+import DetailPubPage from './pages/detail/publish'
 // 引入vuex
 // import Vuex from 'vuex'
 // 引入自己创建的apple组件
@@ -50,19 +50,19 @@ let router = new VueRouter({
         {
           path: 'forecast', // 注意这里的路径不能加/，这里路由就表示/detail/forecast
           component: DetailForPage
+        },
+        {
+          path: 'analysis',
+          component: DetailAnaPage
+        },
+        {
+          path: 'count',
+          component: DetailCouPage
+        },
+        {
+          path: 'publish',
+          component: DetailPubPage
         }
-      // {
-// path: 'analysis',
-// component: DetailAnaPage
-// }
-// {
-// path: 'count',
-// component: DetailCouPage
-        // },
-        // {
-// path: 'publish',
-// component: DetailPubPage
-// }
       ]
     }
   ]
