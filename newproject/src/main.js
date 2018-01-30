@@ -45,6 +45,8 @@ let router = new VueRouter({
     {
       path: '/detail',
       component: DetailPage,
+      // 当跳转到localhost:8080/detail页面时，直接让其跳转到localhost:8080/detail/analysis页面
+      redirect: 'detail/analysis',
       // 设置子路由，在detail.vue中使用
       children: [
         {

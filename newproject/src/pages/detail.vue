@@ -60,6 +60,7 @@ export default {
         }
       ],
       imgMap: {
+        // 每个侧边栏的图片映射
         '/detail/count': require('../assets/images/1.png'),
         '/detail/forecast': require('../assets/images/2.png'),
         '/detail/analysis': require('../assets/images/3.png'),
@@ -69,7 +70,8 @@ export default {
   },
   computed: {
     productIcon () {
-      // 通过计算属性得到网址中的路径，注意是$route而不是$router
+      // 通过计算属性得到网址中的路径，从而加载上述定义的图片，注意是$route而不是$router
+      console.log(this.$route.path)
       return this.imgMap[this.$route.path]
     }
   }
@@ -77,6 +79,7 @@ export default {
 </script>
 
 <style>
+/* 这里没有加入scoped所以是样式共享 */
 .detail-wrap {
   width: 1200px;
   margin: 0 auto;
