@@ -26,7 +26,7 @@
                   有效时间：
               </div>
               <div class="sales-board-line-right">
-
+                  <v-chooser :selections="periodList"></v-chooser>
               </div>
           </div>
           <div class="sales-board-line">
@@ -34,7 +34,9 @@
                   产品版本：
               </div>
               <div class="sales-board-line-right">
-
+                    <v-mul-chooser
+                  :selections="versionList"
+                 ></v-mul-chooser>
               </div>
           </div>
           <div class="sales-board-line">
@@ -80,10 +82,14 @@
 </template>
 
 <script>
-import VSelection from '../../components/base/selection'
+import VSelection from '../../components/base/selection' // 下拉组件
+import VChooser from '../../components/base/chooser' // 单选
+import VMulChooser from '../../components/base/multiplyChooser'
 export default {
   components: {
-    VSelection
+    VSelection,
+    VChooser,
+    VMulChooser
   },
   data () {
     return {
@@ -100,6 +106,34 @@ export default {
           label: '高级版',
           value: 2
         }
+      ],
+      periodList: [
+        {
+          label: '半年',
+          value: 0
+        },
+        {
+          label: '一年',
+          value: 1
+        },
+        {
+          label: '三年',
+          value: 2
+        }
+      ],
+      versionList: [
+        {
+          label: '高级',
+          value: 0
+        },
+        {
+          label: '中级',
+          value: 1
+        },
+        {
+          label: '低级',
+          value: 2
+        },
       ]
     }
   }
