@@ -25,9 +25,12 @@ export default {
   methods: {
     chosenSelection (index) {
       // 当点击的时候打印出index的值
-      console.log(index)
+      // console.log(index)
       this.nowIndex = index
-      this.$emit('on-change', this.selections[index])
+      // 第一次的写法
+      // this.$emit('on-change', this.selections[index])
+      // 在analysis.vue中定义versionList是对象，所以这里要返回一个对象
+      this.$emit('on-change', this.selections[this.nowIndex])
     }
   }
 }

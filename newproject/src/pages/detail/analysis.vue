@@ -10,7 +10,8 @@
                   购买数量：
               </div>
               <div class="sales-board-line-right">
-
+                <!-- 将组件中的东西传出来，通过$event传递,通过attr可以获取buyNum属性 -->
+                  <v-counter @on-change="onParamChange('buyNum' , $event)"></v-counter>
               </div>
           </div>
           <div class="sales-board-line">
@@ -18,7 +19,8 @@
                   产品类型：
               </div>
               <div class="sales-board-line-right">
-                  <v-selection :selections="buyTypes"></v-selection>
+                <!-- 添加on-change监听 -->
+                  <v-selection :selections="buyTypes" @on-change="onParamChange('buyType', $event)"></v-selection>
               </div>
           </div>
           <div class="sales-board-line">
@@ -26,7 +28,7 @@
                   有效时间：
               </div>
               <div class="sales-board-line-right">
-                  <v-chooser :selections="periodList"></v-chooser>
+                  <v-chooser :selections="periodList" @on-change="onParamChange('period', $event)"></v-chooser>
               </div>
           </div>
           <div class="sales-board-line">
@@ -34,9 +36,7 @@
                   产品版本：
               </div>
               <div class="sales-board-line-right">
-                    <v-mul-chooser
-                  :selections="versionList"
-                 ></v-mul-chooser>
+                    <v-mul-chooser :selections="versionList" @on-change="onParamChange('versions', $event)"></v-mul-chooser>
               </div>
           </div>
           <div class="sales-board-line">
@@ -84,15 +84,22 @@
 <script>
 import VSelection from '../../components/base/selection' // 下拉组件
 import VChooser from '../../components/base/chooser' // 单选
-import VMulChooser from '../../components/base/multiplyChooser'
+import VMulChooser from '../../components/base/multiplyChooser' // 多选
+import VCounter from '../../components/base/counter.vue' // 数量选择
 export default {
   components: {
     VSelection,
     VChooser,
-    VMulChooser
+    VMulChooser,
+    VCounter
   },
   data () {
     return {
+      // 定义数据变量,当组件change时，赋给这些变量，同时要修改前面的emit触发触底的值
+      buyNum: 0,
+      buyType: {},
+      versions: [],
+      period: {},
       buyTypes: [
         {
           label: '入门版',
@@ -133,8 +140,28 @@ export default {
         {
           label: '低级',
           value: 2
-        },
+        }
       ]
+    }
+  },
+  methods: {
+    onParamChange (attr, val) {
+      this[attr] = val
+      // attr是属性，也就是buyNum等，而this[attr]则是数量2，3
+      console.log(attr, this[attr])
+    },
+    // 通过vue-resource发送ajax请求
+    // passParams是定义的对象
+    getPrice () {
+      // 其中passParams的定义需要和后端约定是什么类型。
+      let passParams = {
+        buyNumber: this.buyNumber,
+        buyTypes: this.buyTypes.value,
+        period: this.period.value,
+        version: buyVersionsArray.join(',')
+      }
+      // /api/getPrice请求的地址
+      this.$http.post('/api/getPrice', passParams)
     }
   }
 }

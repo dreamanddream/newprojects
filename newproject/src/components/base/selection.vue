@@ -40,7 +40,9 @@ export default {
       this.isDrop = false
       // 使用emit触发事件将子组件状态传递给父组件，简单的理解就是当点击购买可以将selection传出去，知道目前选中的是哪个，同时在
       // 组件有个on-change监听
-      this.$emit('on-change', this.nowIndex)
+      // this.$emit('on-change', this.nowIndex) 这是第一次的写法
+      // 传值给后台时使用下面的方式,以对象的形式返回，因为前面定义的buyTypes是对象
+      this.$emit('on-change', this.selections[this.nowIndex])
     },
     toggleDrop () {
       this.isDrop = !this.isDrop
