@@ -44,13 +44,13 @@
                   总价：
               </div>
               <div class="sales-board-line-right">
-                元
+               {{ price }} 元
               </div>
           </div>
           <div class="sales-board-line">
               <div class="sales-board-line-left">&nbsp;</div>
               <div class="sales-board-line-right">
-                  <div class="button">
+                  <div class="button" @click="showPayDialog">
                     立即购买
                   </div>
               </div>
@@ -78,6 +78,40 @@
           <li>用户所在地理区域分布状况等</li>
         </ul>
       </div>
+      <!-- 弹框 -->
+       <my-dialog :is-show="isShowPayDialog" @on-close="hidePayDialog">
+        <table class="buy-dialog-table">
+          <tr>
+            <th>购买数量</th>
+            <th>产品类型</th>
+            <th>有效时间</th>
+
+
+
+
+            <th>产品版本</th>
+            <th>总价</th>
+          </tr>
+          <tr>
+            <!-- 直接动态获取数据  -->
+            <td>{{ buyNum }}</td>
+            <td>{{ buyType.label }}</td>
+            <td>{{ period.label }}</td>
+            <td>
+              <span v-for="item in versions">{{ item.label }}</span>
+            </td>
+            <td>{{ price }}</td>
+          </tr>
+        </table>
+        <h3 class="buy-dialog-title">请选择银行</h3>
+        <bank-chooser @on-change="onChangeBanks"></bank-chooser>
+        <div class="button buy-dialog-btn">
+          确认购买
+        </div>
+      </my-dialog>
+      <my-dialog :is-show="isShowErrDialog" @on-close="hideErrDialog">
+        支付失败！
+      </my-dialog>
   </div>
 </template>
 
@@ -86,19 +120,25 @@ import VSelection from '../../components/base/selection' // 下拉组件
 import VChooser from '../../components/base/chooser' // 单选
 import VMulChooser from '../../components/base/multiplyChooser' // 多选
 import VCounter from '../../components/base/counter.vue' // 数量选择
+import _ from 'lodash' // 通过npm已经安装过
+import Dialog from '../../components/dialog' // 引入弹框
+import BankChooser from '../../components/bankChooser' // 引入银行选择
 export default {
   components: {
     VSelection,
     VChooser,
     VMulChooser,
-    VCounter
+    VCounter,
+    MyDialog: Dialog,
+    BankChooser
   },
   data () {
     return {
+      price: 0,
       // 定义数据变量,当组件change时，赋给这些变量，同时要修改前面的emit触发触底的值
       buyNum: 0,
       buyType: {},
-      versions: [],
+      versions: [], // 为什么要将versions设置成数组，其他两个是对象？？？？
       period: {},
       buyTypes: [
         {
@@ -141,28 +181,71 @@ export default {
           label: '低级',
           value: 2
         }
-      ]
+      ],
+      // 定义弹框的初始状态
+      isShowPayDialog: false,
+      isShowCheckOrder: false,
+      isShowErrDialog: false,
+      // 银行id
+      bankId: null
     }
   },
   methods: {
+    // 这个函数是设置监听，获取相关信息
     onParamChange (attr, val) {
       this[attr] = val
       // attr是属性，也就是buyNum等，而this[attr]则是数量2，3
       console.log(attr, this[attr])
+      this.getPrice() // 调用
     },
     // 通过vue-resource发送ajax请求
     // passParams是定义的对象
+    // getPrice是处理数据，传递数据，响应数据
     getPrice () {
+      // 这里需要处理versions，使用lodash，使用map遍历数组versions,同时使用了箭头函数
+      let buyVersionsArray = _.map(this.versions, (item) => {
+        return item.value // buyVersionsArray被处理成一个只包含value值而没有label的数组，然后通过下面的join处理成字符串
+      })
       // 其中passParams的定义需要和后端约定是什么类型。
-      let passParams = {
-        buyNumber: this.buyNumber,
-        buyTypes: this.buyTypes.value,
-        period: this.period.value,
-        version: buyVersionsArray.join(',')
+      let reqParams = {
+        buyNumber: this.buyNum, // 在data中定义的参数
+        buyTypes: this.buyType.value,
+        period: this.period.value, // 因为不需要获取对象，只需要获取对象中的具体value,不需要label
+        version: buyVersionsArray.join(',') // 如果得到的是[1,2,3],那么经过join处理得到1,2,3这样的字符串
       }
-      // /api/getPrice请求的地址
-      this.$http.post('/api/getPrice', passParams)
+      // /api/getPrice请求的地址,将getPrice中的数据写到db中，后端根据reqParams返回amount数据
+      this.$http.post('/api/getPrice', reqParams).then((res) => {
+        // res
+        this.price = res.data.amount
+        console.log('响应返回的数据' + res.data.amount)
+      })
+    },
+    // 弹框的现实与隐藏
+    showPayDialog () {
+      this.isShowPayDialog = true
+    },
+    hidePayDialog () {
+      this.isShowPayDialog = false
+    },
+    hideErrDialog () {
+      this.isShowErrDialog = false
+    },
+    hideCheckOrder () {
+      this.isShowCheckOrder = false
+    },
+    // 银行
+    onChangeBanks (bankObj) {
+      this.bankId = bankObj.id
+      // console.log('查看银行id' + this.bankId)
     }
+  },
+  // 初始化四个数据：数量，版本，有效时间，类型
+  mounted () {
+    this.buyNum = 1
+    this.buyType = this.buyTypes[0]
+    this.versions = [this.versionList[0]]
+    this.period = this.periodList[0]
+    this.getPrice()
   }
 }
 </script>

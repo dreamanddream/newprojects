@@ -24,5 +24,8 @@
   "login": {
     "username": "hehe",
     "userId": 123123
+  },
+  "getPrice": {
+    "amount": 678
   }
 }
