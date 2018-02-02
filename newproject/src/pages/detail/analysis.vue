@@ -59,7 +59,6 @@
       <div class="sales-board-des">
         <h2>产品说明</h2>
         <p>网站访问统计分析报告的基础数据源于网站流量统计信息，但其价值远高于原始数据资料。专业的网站访问统计分析报告对网络营销的价值，正如专业的财务分析报告对企业经营策略的价值。</p>
-
         <h3>用户行为指标</h3>
         <ul>
           <li>用户行为指标主要反映用户是如何来到网站的、在网站上停留了多长时间、访问了哪些页面等，主要的统计指标包括：</li>
@@ -85,10 +84,6 @@
             <th>购买数量</th>
             <th>产品类型</th>
             <th>有效时间</th>
-
-
-
-
             <th>产品版本</th>
             <th>总价</th>
           </tr>
@@ -105,13 +100,15 @@
         </table>
         <h3 class="buy-dialog-title">请选择银行</h3>
         <bank-chooser @on-change="onChangeBanks"></bank-chooser>
-        <div class="button buy-dialog-btn">
+        <div class="button buy-dialog-btn" @click="confirmBuy">
           确认购买
         </div>
       </my-dialog>
       <my-dialog :is-show="isShowErrDialog" @on-close="hideErrDialog">
         支付失败！
       </my-dialog>
+      <!-- 支付狀態的提示框 -->
+      <check-order :is-show-check-dialog="isShowCheckOrder" :order-id="orderId" @on-close-check-dialog="hideCheckOrder"></check-order>
   </div>
 </template>
 
@@ -123,6 +120,7 @@ import VCounter from '../../components/base/counter.vue' // 数量选择
 import _ from 'lodash' // 通过npm已经安装过
 import Dialog from '../../components/dialog' // 引入弹框
 import BankChooser from '../../components/bankChooser' // 引入银行选择
+import CheckOrder from '../../components/checkOrder' // 訂單狀態核對
 export default {
   components: {
     VSelection,
@@ -130,7 +128,8 @@ export default {
     VMulChooser,
     VCounter,
     MyDialog: Dialog,
-    BankChooser
+    BankChooser,
+    CheckOrder
   },
   data () {
     return {
@@ -186,8 +185,9 @@ export default {
       isShowPayDialog: false,
       isShowCheckOrder: false,
       isShowErrDialog: false,
-      // 银行id
-      bankId: null
+      // 银行id 訂單狀態orderId
+      bankId: null,
+      orderId: null
     }
   },
   methods: {
@@ -237,6 +237,30 @@ export default {
     onChangeBanks (bankObj) {
       this.bankId = bankObj.id
       // console.log('查看银行id' + this.bankId)
+    },
+    // 点击立即购买
+    confirmBuy () {
+      let buyVersionsArray = _.map(this.versions, (item) => {
+        return item.value
+      })
+      let reqParams = {
+        buyNumber: this.buyNum,
+        buyType: this.buyType.value,
+        period: this.period.value,
+        version: buyVersionsArray.join(','),
+        bankId: this.bankId
+      }
+      this.$http.post('/api/createOrder', reqParams)
+      .then((res) => {
+        // 请求成功后，后端会返回一个订单号id,这里是在db.json中写死的一个orderId
+        this.orderId = res.data.orderId
+        this.isShowCheckOrder = true
+        this.isShowPayDialog = false // 這個是出現銀行的彈框
+      }, (err) => {
+        // 請求失敗時候的設置
+        this.isShowBuyDialog = false
+        this.isShowErrDialog = true
+      })
     }
   },
   // 初始化四个数据：数量，版本，有效时间，类型
