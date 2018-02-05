@@ -17,6 +17,8 @@ import DetailForPage from './pages/detail/forecase'
 import DetailAnaPage from './pages/detail/analysis'
 import DetailCouPage from './pages/detail/count'
 import DetailPubPage from './pages/detail/publish'
+// 添加订单列表路由
+import OrderListPage from './pages/orderList'
 // 引入vuex
 // import Vuex from 'vuex'
 // 引入自己创建的apple组件
@@ -40,6 +42,11 @@ let router = new VueRouter({
       // 注意这里是component
       // 配置根页面路由，一旦访问根页面，就跳转到/pages/index页面
       component: IndexPage
+    },
+    {
+      // 添加订单路由
+      path: '/orderList',
+      component: OrderListPage
     },
     // 添加路由配置
     {
