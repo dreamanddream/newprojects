@@ -1,110 +1,112 @@
 <style scoped>
 .datetime-picker {
-    position: relative;
-    display: inline-block;
-    font-family: "Segoe UI","Lucida Grande",Helvetica,Arial,"Microsoft YaHei";
-    -webkit-font-smoothing: antialiased;
-    color: #333;
+  position: relative;
+  display: inline-block;
+  font-family: "Segoe UI", "Lucida Grande", Helvetica, Arial, "Microsoft YaHei";
+  -webkit-font-smoothing: antialiased;
+  color: #333;
 }
 
 .datetime-picker * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 .datetime-picker input {
-    width: 100%;
-    padding: 5px 10px;
-    height: 30px;
-    outline: 0 none;
-    border: 1px solid #ccc;
-    font-size: 13px;
+  width: 100%;
+  padding: 5px 10px;
+  height: 30px;
+  outline: 0 none;
+  border: 1px solid #ccc;
+  font-size: 13px;
 }
 
 .datetime-picker .picker-wrap {
-    position: absolute;
-    z-index: 1000;
-    width: 238px;
-    height: 280px;
-    margin-top: 2px;
-    background-color: #fff;
-    box-shadow: 0 0 6px #ccc;
+  position: absolute;
+  z-index: 1000;
+  width: 238px;
+  height: 280px;
+  margin-top: 2px;
+  background-color: #fff;
+  box-shadow: 0 0 6px #ccc;
 }
 
 .datetime-picker table {
-    width: 100%;
-    border-collapse: collapse;
-    border-spacing: 0;
-    text-align: center;
-    font-size: 13px;
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  text-align: center;
+  font-size: 13px;
 }
 
 .datetime-picker tr {
-    height: 34px;
-    border: 0 none;
+  height: 34px;
+  border: 0 none;
 }
 
-.datetime-picker th, .datetime-picker td {
-    user-select: none;
-    width: 34px;
-    height: 34px;
-    padding: 0;
-    border: 0 none;
-    line-height: 34px;
-    text-align: center;
+.datetime-picker th,
+.datetime-picker td {
+  user-select: none;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 0 none;
+  line-height: 34px;
+  text-align: center;
 }
 
 .datetime-picker td {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .datetime-picker td:hover {
-    background-color: #f0f0f0;
+  background-color: #f0f0f0;
 }
 
-.datetime-picker td.date-pass, .datetime-picker td.date-future {
-    color: #aaa;
+.datetime-picker td.date-pass,
+.datetime-picker td.date-future {
+  color: #aaa;
 }
 
 .datetime-picker td.date-active {
-    background-color: #ececec;
-    color: #3bb4f2;
+  background-color: #ececec;
+  color: #3bb4f2;
 }
 
 .datetime-picker .date-head {
-    background-color: #3bb4f2;
-    text-align: center;
-    color: #fff;
-    font-size: 14px;
+  background-color: #3bb4f2;
+  text-align: center;
+  color: #fff;
+  font-size: 14px;
 }
 
 .datetime-picker .date-days {
-    color: #3bb4f2;
-    font-size: 14px;
+  color: #3bb4f2;
+  font-size: 14px;
 }
 
 .datetime-picker .show-year {
-    display: inline-block;
-    min-width: 62px;
-    vertical-align: middle;
+  display: inline-block;
+  min-width: 62px;
+  vertical-align: middle;
 }
 
 .datetime-picker .show-month {
-    display: inline-block;
-    min-width: 28px;
-    vertical-align: middle;
+  display: inline-block;
+  min-width: 28px;
+  vertical-align: middle;
 }
 
 .datetime-picker .btn-prev,
 .datetime-picker .btn-next {
-    cursor: pointer;
-    display: inline-block;
-    padding: 0 10px;
-    vertical-align: middle;
+  cursor: pointer;
+  display: inline-block;
+  padding: 0 10px;
+  vertical-align: middle;
 }
 
 .datetime-picker .btn-prev:hover,
 .datetime-picker .btn-next:hover {
-    background: rgba(16, 160, 234, 0.5);
+  background: rgba(16, 160, 234, 0.5);
 }
 </style>
 
@@ -155,120 +157,137 @@ export default {
     readonly: { type: Boolean, default: false },
     value: { type: String, default: '' }, // 组件本身可以获取到value所以在父组件使用中不用设置value
     format: { type: String, default: 'YYYY-MM-DD' },
-    styleObj: {type: Object, default: null}
+    styleObj: { type: Object, default: null }
   },
-  data () {
+  data() {
     return {
-        show: false,
-        showValue: '',
-        days: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
-        months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-        date: [],
-        now: new Date()
+      show: false,
+      showValue: '',
+      days: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
+      months: [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec"
+      ],
+      date: [],
+      now: new Date()
     };
   },
   watch: {
-    now () {
-        this.update();
+    now() {
+      this.update();
     },
-    show () {
-        this.update();
+    show() {
+      this.update();
     }
   },
   methods: {
-    close () {
-        this.show = false;
+    close() {
+      this.show = false;
     },
-    update () {
-        var arr = [];
-        var time = new Date(this.now);
-        time.setMonth(time.getMonth(), 1);           // the first day
-        var curFirstDay = time.getDay();
-        curFirstDay === 0 && (curFirstDay = 7);
-        time.setDate(0);                             // the last day
-        var lastDayCount = time.getDate();
-        for (let i = curFirstDay; i > 0; i--) {
-            arr.push({
-                text: lastDayCount - i + 1,
-                time: new Date(time.getFullYear(), time.getMonth(), lastDayCount - i + 1),
-                status: 'date-pass'
-            });
-        }
+    update() {
+      var arr = [];
+      var time = new Date(this.now);
+      time.setMonth(time.getMonth(), 1); // the first day
+      var curFirstDay = time.getDay();
+      curFirstDay === 0 && (curFirstDay = 7);
+      time.setDate(0); // the last day
+      var lastDayCount = time.getDate();
+      for (let i = curFirstDay; i > 0; i--) {
+        arr.push({
+          text: lastDayCount - i + 1,
+          time: new Date(
+            time.getFullYear(),
+            time.getMonth(),
+            lastDayCount - i + 1
+          ),
+          status: "date-pass"
+        });
+      }
 
-    time.setMonth(time.getMonth() + 2, 0);       // the last day of this month
-    var curDayCount = time.getDate();
-    time.setDate(1);                             // fix bug when month change
-    var value = this.value || this.stringify(new Date());
-    for (let i = 0; i < curDayCount; i++) {
+      time.setMonth(time.getMonth() + 2, 0); // the last day of this month
+      var curDayCount = time.getDate();
+      time.setDate(1); // fix bug when month change
+      var value = this.value || this.stringify(new Date());
+      for (let i = 0; i < curDayCount; i++) {
         let tmpTime = new Date(time.getFullYear(), time.getMonth(), i + 1);
         let status = '';
-        this.stringify(tmpTime) === value && (status = 'date-active');
+        this.stringify(tmpTime) === value && (status = "date-active");
         arr.push({
-            text: i + 1,
-            time: tmpTime,
-            status: status
+          text: i + 1,
+          time: tmpTime,
+          status: status
         });
-    }
+      }
 
-    var j = 1;
-    while (arr.length < 42) {
+      var j = 1;
+      while (arr.length < 42) {
         arr.push({
-            text: j,
-            time: new Date(time.getFullYear(), time.getMonth() + 1, j),
-            status: 'date-future'
+          text: j,
+          time: new Date(time.getFullYear(), time.getMonth() + 1, j),
+          status: "date-future"
         });
         j++;
-    }
+      }
       this.date = arr;
     },
-      yearClick (flag) {
-          this.now.setFullYear(this.now.getFullYear() + flag);
-          this.now = new Date(this.now);
-      },
-      monthClick (flag) {
-          this.now.setMonth(this.now.getMonth() + flag);
-          this.now = new Date(this.now);
-      },
-      pickDate (index) {
-          this.show = false;
-          this.now = new Date(this.date[index].time);
-          this.showValue = this.stringify();
-          this.$emit('on-change', this.showValue);
-      },
-      parse (str) {
-          var time = new Date(str);
-          return isNaN(time.getTime()) ? null : time;
-      },
-      stringify (time = this.now, format = this.format) {
-          var year = time.getFullYear();
-          var month = time.getMonth() + 1;
-          var date = time.getDate();
-          var monthName = this.months[time.getMonth()];
+    yearClick(flag) {
+      this.now.setFullYear(this.now.getFullYear() + flag);
+      this.now = new Date(this.now);
+    },
+    monthClick(flag) {
+      this.now.setMonth(this.now.getMonth() + flag);
+      this.now = new Date(this.now);
+    },
+    pickDate(index) {
+      this.show = false;
+      this.now = new Date(this.date[index].time);
+      this.showValue = this.stringify();
+      this.$emit("on-change", this.showValue);
+    },
+    parse(str) {
+      var time = new Date(str);
+      return isNaN(time.getTime()) ? null : time;
+    },
+    stringify(time = this.now, format = this.format) {
+      var year = time.getFullYear();
+      var month = time.getMonth() + 1;
+      var date = time.getDate();
+      var monthName = this.months[time.getMonth()];
 
-          var map = {
-              YYYY: year,
-              MMM: monthName,
-              MM: ('0' + month).slice(-2),
-              M: month,
-              DD: ('0' + date).slice(-2),
-              D: date
-          };
-          return format.replace(/Y+|M+|D+/g, function (str) {
-              return map[str];
-          });
-      },
-      leave (e) {
-          if (!this.$el.contains(e.target)) {
-              this.close();
-          }
+      var map = {
+        YYYY: year,
+        MMM: monthName,
+        MM: ("0" + month).slice(-2),
+        M: month,
+        DD: ("0" + date).slice(-2),
+        D: date
+      };
+      return format.replace(/Y+|M+|D+/g, function(str) {
+        return map[str];
+      });
+    },
+    leave(e) {
+      if (!this.$el.contains(e.target)) {
+        this.close();
       }
+    }
   },
-  mounted () {
-      this.now = this.parse(this.value) || new Date();
-      document.addEventListener('click', this.leave, false);
+  mounted() {
+    this.now = this.parse(this.value) || new Date();
+    document.addEventListener("click", this.leave, false);
   },
-  beforeDestroy () {
-      document.removeEventListener('click', this.leave, false);
+  beforeDestroy() {
+    document.removeEventListener("click", this.leave, false);
   }
 };
 </script>

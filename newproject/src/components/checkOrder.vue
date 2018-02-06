@@ -60,6 +60,7 @@ export default {
         this.$emit('on-close-check-dialog')
       })
     },
+    // 添加路由，跳转到订单页，$router.push是在组件内部的跳转，对比下router-link方法
     toOrderList () {
       this.$router.push({path: '/orderList'})
     }

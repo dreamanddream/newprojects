@@ -120,7 +120,7 @@ import VCounter from '../../components/base/counter.vue' // 数量选择
 import _ from 'lodash' // 通过npm已经安装过
 import Dialog from '../../components/dialog' // 引入弹框
 import BankChooser from '../../components/bankChooser' // 引入银行选择
-import CheckOrder from '../../components/checkOrder' // 訂單狀態核對
+import CheckOrder from '../../components/checkOrder' // 订单状态核对
 export default {
   components: {
     VSelection,
@@ -220,13 +220,14 @@ export default {
         console.log('响应返回的数据' + res.data.amount)
       })
     },
-    // 弹框的现实与隐藏
+    // 弹框的显示与隐藏
     showPayDialog () {
       this.isShowPayDialog = true
     },
     hidePayDialog () {
       this.isShowPayDialog = false
     },
+    // 购买状态的显示与隐藏
     hideErrDialog () {
       this.isShowErrDialog = false
     },
